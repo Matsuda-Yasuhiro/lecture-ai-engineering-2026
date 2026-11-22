@@ -1,0 +1,17 @@
+$ uv run python -c import sys
+from app.retrieval import search_graph
+r = search_graph(sys.argv[1])
+for kind in ("seeds", "expanded"):
+    for p in r[kind]:
+        print(kind, p["page_id"], "第%d回・PDF p.%d" % (p["lecture"], p["page"]), "hops=%d" % p["hops"], p["title"], "| 経路:", " → ".join(n["title"] for n in p["path"])) LoRA 固定 学習 QLoRA 追加
+[date] 2026-11-22 17:21:36
+seeds lec02-main-p052 第2回・PDF p.52 hops=0 LoRA と QLoRA ：大きなモデルも GPU 1 台で調整できる | 経路: LoRA と QLoRA ：大きなモデルも GPU 1 台で調整できる
+seeds lec02-main-p051 第2回・PDF p.51 hops=0 PEFT ：モデル全体ではなく、一部だけを学習する | 経路: PEFT ：モデル全体ではなく、一部だけを学習する
+seeds lec02-main-p060 第2回・PDF p.60 hops=0 今日の演習： QLoRA で出力形式を矯正し、効果を測る | 経路: 今日の演習： QLoRA で出力形式を矯正し、効果を測る
+expanded lec02-main-p053 第2回・PDF p.53 hops=1 チャットボットの場合：何を FT し、何を FT しないか | 経路: LoRA と QLoRA ：大きなモデルも GPU 1 台で調整できる → チャットボットの場合：何を FT し、何を FT しないか
+expanded lec02-main-p050 第2回・PDF p.50 hops=1 判断の順番：測る → 分ける → プロンプト → Fine-Tuning | 経路: PEFT ：モデル全体ではなく、一部だけを学習する → 判断の順番：測る → 分ける → プロンプト → Fine-Tuning
+expanded lec02-main-p059 第2回・PDF p.59 hops=1 第 2 回のまとめ： 4 つの芯と、明日やること | 経路: 今日の演習： QLoRA で出力形式を矯正し、効果を測る → 第 2 回のまとめ： 4 つの芯と、明日やること
+expanded lec02-main-p061 第2回・PDF p.61 hops=1 演習の進め方と提出物（仮） | 経路: 今日の演習： QLoRA で出力形式を矯正し、効果を測る → 演習の進め方と提出物（仮）
+expanded lec02-main-p049 第2回・PDF p.49 hops=2 FT は「コストを下げる」ためにも使う | 経路: PEFT ：モデル全体ではなく、一部だけを学習する → 判断の順番：測る → 分ける → プロンプト → Fine-Tuning → FT は「コストを下げる」ためにも使う
+expanded lec02-main-p062 第2回・PDF p.62 hops=2 次回： AI エージェント。今日の性質が設計の前提になる | 経路: 今日の演習： QLoRA で出力形式を矯正し、効果を測る → 演習の進め方と提出物（仮） → 次回： AI エージェント。今日の性質が設計の前提になる
+expanded lec02-main-p047 第2回・PDF p.47 hops=2 根拠と諸説：知識の追加は RAG が効きやすい | 経路: LoRA と QLoRA ：大きなモデルも GPU 1 台で調整できる → LoRA → 根拠と諸説：知識の追加は RAG が効きやすい

@@ -1,0 +1,98 @@
+$ uv run python - (read_page で根拠ページの本文を表示)
+[date] 2026-11-22 17:09:20
+== lec02-main-p052（第2回・PDF p.52）LoRA と QLoRA ：大きなモデルも GPU 1 台で調整できる
+4/4 　選んだモデルを、いつ・どう直すか
+LoRA と QLoRA ：大きなモデルも GPU 1 台で調整できる
+元の重みは固定し、小さな「差分」だけを学習する（ LoRA ）。さらに元の重みを 4bit に圧縮する（ QLoRA ）
+出典： E. J. Hu et al. 「 LoRA 」（ ICLR 2022 ）／ T. Dettmers et al. 「 QLoRA 」（ NeurIPS 2023 ）。演習では transformers ・ peft ・ bitsandbytes ・ TRL を使用
+LoRA （ Hu et al. Fig.1 ）： A と B だけを学習する
+青：元の重み W
+固定して学習しない。 QLoRA では
+4bit （数値を粗く保存）にして
+約 1/4 。 7B なら約 4GB
+橙：小さな行列 A ・ B
+これだけを学習。細長い 2 つの
+行列の積で、変化分を表す（低ランク）
+イメージ
+本体はそのままに、薄い「付箋」を
+書き足す。学習するのは全体の
+1% 未満にもできる
+650 億
+パラメータのモデルを
+48GB GPU 1 台
+で微調整（ QLoRA 論文）
+• Colab の GPU （例： 16GB ）でも、
+数十億パラメータ級なら調整できる。今日の
+演習はこれ
+• データの準備・評価・運用の手間は別にかかる
+© Matsuo-Iwasawa Lab, The University of Tokyo 52
+
+【図表・画像内の補足文字起こし】
+LoRA図：Pretrained Weights W ∈ R^(d×d)、x、h、A ~ N(0, σ²)、B = 0、d、r。
+
+== lec03-main-p013（第3回・PDF p.13）メモリ
+メモリ
+コンテキストは有限である。新しいチャットで始めたときに、過去のコンテキストを参照するシステムが欲しい。
+出典）説明用の模式図。保存先（ファイル、データベースなど）と探し方（全件、検索など）は実装により異なる。
+©MATSUO-IWASAWA LAB, THE UNIVERSITY OF TOKYO
+過去のチャット
+昨日：テストの修正を依頼
+・pytest で実行したい
+・原因は range の範囲だった
+・「コメントは日本語で」と
+言われた
+①
+書き出す
+メモリ（外の保存先）
+テストは pytest で実行する
+range の境界に注意
+コメントは日本語で書く
+②
+戻す
+新しいコンテキスト
+メモリ：pytest で実行／
+コメントは日本語
+メッセージ：別のテストも
+落ちたので直して
+覚えている ≠ 学習。
+
+== lec03-main-p039（第3回・PDF p.39）実装例：Claude
+実装例：Claude
+Claude の例。1つのセッションの中で効くものと、セッションをまたいで効くものがある
+出典）Anthropic「Compaction overview」「Memory tool」（Claude Platform Docs）、「How Claude remembers your project」（Claude Code Docs）、いずれも 2026/10/21 確認。Packer et al.（2023）
+arXiv:2310.08560。
+©MATSUO-IWASAWA LAB, THE UNIVERSITY OF TOKYO
+コンテキストの中（同じセッション）
+コンパクション（履歴を要約して詰める）
+古い履歴を、要約に置き換える。
+外の保存先（セッションをまたぐ）
+メモリツール（Claude API）
+/memories のファイルを、モデルが要求し
+アプリが自分の保存先で実行する
+自動メモリ（Claude Code）
+Claude が自分でメモを書き、
+毎回先頭200行か25KBまで読む
+書き出す
+必要に応じて
+エージェントが読み戻
+す
+書いたメモリは次回のコンテキストに入る。中身を人が確かめる。 外から書き込まれる危険もある。
+
+== lec03-main-p040（第3回・PDF p.40）実装例：OpenClaw
+実装例：OpenClaw
+毎晩過去のやり取りを読み直し、残すものだけを長期メモリに移す。
+出典）OpenClaw Docs「Memory overview」「Memory architecture」。2026/10 時点。各段階の説明は要約。
+©MATSUO-IWASAWA LAB, THE UNIVERSITY OF TOKYO
+日々のメモ（memory/日付.md）
+10/24 のメモ 10/25 のメモ 10/26 のメモ
+毎晩、自動で
+見直し（dreaming）
+1 集める：重複を除いて、候補を並べる
+2 見比べる：何度も出てくるテーマを探す
+3 移す：基準を超えたものだけ残す
+MEMORY.md（長期メモリ） 次の会話の最初に読み込む
+人が手で整理しなくていい
+全部は残さない
+一度きりの調べものは、日々のメモに残るだけ。長期メ
+モリが膨らまない。
+
