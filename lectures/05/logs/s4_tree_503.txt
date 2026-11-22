@@ -1,0 +1,4 @@
+$ uv run python -m app.agent --tree --trace 第2回の説明では、LoRAは何を固定し何を学習しますか？ QLoRAは何を加えますか？
+[date] 2026-11-22 17:20:08
+[model] gemini-3.5-flash-lite
+モデルが混み合っています（503）。少し待ってから再実行してください。

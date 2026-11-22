@@ -1,0 +1,15 @@
+$ uv run python -m app.agent --trace 第2回の説明では、LoRAは何を固定し何を学習しますか？ QLoRAは何を加えますか？
+[date] 2026-11-22 17:13:32
+[model] gemini-3.5-flash-lite
+講義資料によると、LoRAとQLOARの仕組みや学習対象について以下のように説明されています。
+
+* **LoRAが固定するもの**：元の重み（$W$）を固定し、学習はしない（第2回・PDF p.52）
+* **LoRAが学習するもの**：細長い2つの小さな行列の積（低ランク）で変化分を表す、小さな行列A・Bの差分のみ（第2回・PDF p.51, p.52）
+* **QLoRAが加えるもの**：LoRAに加えて、元の重みを4bit（数値を粗く保存）に圧縮する（第2回・PDF p.51, p.52）
+
+--- trace ---
+[tool call]   search_materials({'query': 'LoRA QLoRA 固定 学習'})
+[tool return] search_materials -> {"results": [{"page_id": "lec02-main-p052", "document_id": "lec02-main", "lecture": 2, "document_title": "基盤モデルの仕組み", "s…
+[time] 回答完了まで 7.16 秒（検索・埋め込みを含む）
+[usage] 入力 5,187 tokens / 出力 181 tokens / モデル応答 2 回
+[cost] 生成APIの推定コスト: $0.002009 USD（埋め込み・索引構築分は含まない）
